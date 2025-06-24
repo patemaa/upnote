@@ -1,4 +1,4 @@
-<nav class="h-10 bg-gray-950 text-gray-200 border-b border-gray-800 flex items-center justify-between px-3">
+<nav class="h-10 bg-[#1e2020] text-gray-200 border-b border-[#0f0f14] flex items-center justify-between px-3">
     {{-- Sol taraf: Menü, Geri/İleri, Arama --}}
     <div class="flex items-center">
         <!-- Menü ikonu -->
