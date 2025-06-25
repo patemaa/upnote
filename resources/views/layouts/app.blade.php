@@ -17,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased overflow-hidden" >
 <div class="min-h-screen bg-gray-100 dark:bg-[#1e2020] text-black dark:text-gray-200">
     @include('layouts.navigation')
 
