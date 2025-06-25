@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class NoteController extends Controller
 {
+    public function index()
+    {
+        $notes = Note::latest()->get();
+        $pinnedNotes = $notes->where('is_pinned', true);
+        return view('notes.index', compact('notes', 'pinnedNotes'));
+    }
+
     public function create()
     {
         return view('notes.create');

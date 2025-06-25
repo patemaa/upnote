@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "afatmustafa/blade-hugeicons": "^1.0",
         "codeat3/blade-ant-design-icons": "^1.9",
         "codeat3/blade-coolicons": "^1.6",
         "laravel/framework": "^12.0",

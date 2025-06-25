@@ -1,4 +1,4 @@
-<aside class="w-[198px] bg-[#1e2020] border-r border-[#0f0f14] p-2 overflow-y-auto text-gray-300 space-y-2 select-none text-xs">
+<aside class="min-h-screen w-[198px] bg-[#1e2020] border-r border-[#0f0f14] p-2 overflow-y-auto text-gray-300 space-y-2 select-none text-xs">
 
     {{-- ALL NOTES --}}
     <div class="flex items-center justify-between hover:text-white px-2 py-2 rounded hover:bg-gray-800 cursor-pointer">

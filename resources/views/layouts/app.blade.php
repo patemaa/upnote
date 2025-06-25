@@ -14,16 +14,17 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-sans antialiased">
-<div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-black dark:text-gray-200">
+<div class="min-h-screen bg-gray-100 dark:bg-[#1e2020] text-black dark:text-gray-200">
     @include('layouts.navigation')
 
     <main>
         <div class="flex h-[calc(100%-2.5rem)]"> {{-- Nav yüksekliği: ~2.5rem (h-10) --}}
             @include('components.sidebar')    {{-- Sol: Klasörler --}}
-            @include('components.notes')      {{-- Orta: Not listesi --}}
+            @include('components.center')      {{-- Orta: Not listesi --}}
             @include('components.editor')     {{-- Sağ: Not düzenleyici --}}
         </div>
     </main>
