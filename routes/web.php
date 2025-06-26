@@ -3,14 +3,22 @@
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Note;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $notes = Note::where('user_id', auth()->id())
+        ->orderByDesc('is_pinned')
+        ->orderByDesc('updated_at')
+        ->get();
+
+    return view('dashboard', compact('notes'));
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::get('/create', [NoteController::class, 'create'])->name('notes.create');
 Route::post('/store', [NoteController::class, 'store'])->name('notes.store');
@@ -21,38 +29,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-use Illuminate\Http\Request;
-
-Route::get('/editor', function () {
-    return view('editor');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/notes/store', [NoteController::class, 'store'])->name('notes.store');
+    Route::get('/notes', [NoteController::class, 'index'])->name('notes.index');
+    Route::get('/notes/counts', [NoteController::class, 'count'])->name('notes.count');
 });
-
-Route::post('/save-content', function (Request $request) {
-    $request->validate([
-        'content' => 'required|string',
-    ]);
-    // $request->content içinde HTML içeriği var, kaydedebilirsin
-    // Örneğin Model::create(['content' => $request->content]);
-
-    return redirect('/editor')->with('success', 'İçerik başarıyla kaydedildi!');
-})->name('save-content');
-
-use Illuminate\Support\Facades\Cache;
-
-Route::get('/editor', function () {
-    $note = Cache::get('note_content', '');
-    return view('editor', ['noteContent' => $note]);
-});
-
-Route::post('/auto-save', function (Request $request) {
-    $request->validate([
-        'content' => 'nullable|string',
-    ]);
-
-    Cache::put('note_content', $request->input('content'), now()->addDays(7));
-
-    return response()->json(['status' => 'success']);
-})->name('auto-save');
-
 
 require __DIR__.'/auth.php';
