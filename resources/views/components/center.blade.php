@@ -1,4 +1,4 @@
-<section class="w-60 bg-[#1e2020] border-r border-[#0f0f14] overflow-y-auto text-gray-200">
+<section class="w-60 bg-[#1e2020] border-r border-[#0f0f14] overflow-y-auto text-gray-200 min-h-screen">
     <div class="container mx-auto flex justify-between items-center mb-3">
         <div class="w-60 bg-[#1e2020 rounded shadow">
             <div
@@ -34,7 +34,7 @@
                     </svg>
                 </button>
 
-                <div x-show="open" class="space-y-3 px-2 py-2 bg-[#1e2020]">
+                <div x-transition x-show="open" class="space-y-3 px-2 py-2 bg-[#1e2020]">
                     <div
                         class="bg-[#2d2e31] rounded-[4px] p-3 flex justify-between items-start transition-all cursor-pointer">
                         <div>
