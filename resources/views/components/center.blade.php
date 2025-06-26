@@ -57,7 +57,7 @@
 
             <div x-show="open" class="space-y-3 px-2 py-2 bg-[#1e2020]">
                 <div
-                    class="bg-[#2d2e31] rounded-[4px] p-3 flex justify-between items-start transition-all cursor-pointer">
+                    class="bg-[#1e2020] rounded-[4px] p-3 flex justify-between items-start transition-all cursor-pointer">
                     <div>
                         <span class="font-medium text-sm">Title</span>
                         <p class="text-xs text-gray-400 mt-1 truncate max-w-[180px] font-medium">Content</p>
@@ -66,7 +66,7 @@
                 </div>
             </div>
             <div>
-                <hr class="text-[#373741] w-[200px] mx-auto font-thin">
+                <hr class="text-[#373741] w-[200px] mx-auto">
             </div>
 
         </div>
