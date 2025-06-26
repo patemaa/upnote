@@ -75,4 +75,16 @@
             <span class="text-[#4a91fc] font-bold ">Trash</span>
         </div>
     </div>
+
+    <script>
+        fetch("{{ route('notes.count') }}")
+            .then(res => res.json())
+            .then(counts => {
+                document.getElementById('all-count').innerText = counts.all;
+                document.getElementById('uncategorized-count').innerText = counts.uncategorized;
+                document.getElementById('todo-count').innerText = counts.todo;
+                document.getElementById('unsynced-count').innerText = counts.unsynced;
+            });
+    </script>
+
 </aside>
