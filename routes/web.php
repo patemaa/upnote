@@ -19,6 +19,14 @@ Route::get('/dashboard', function () {
     return view('dashboard', compact('notes'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware(['auth'])->group(function () {
+    Route::post('/notes/store', [NoteController::class, 'store'])->name('notes.store');
+    Route::get('/dashboard', function () {
+        $notes = \App\Models\Note::where('user_id', auth()->id())->get();
+        return view('dashboard', compact('notes'));
+    })->name('dashboard');
+});
+
 
 Route::get('/create', [NoteController::class, 'create'])->name('notes.create');
 Route::post('/store', [NoteController::class, 'store'])->name('notes.store');

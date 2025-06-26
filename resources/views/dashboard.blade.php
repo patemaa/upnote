@@ -5,13 +5,23 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
+    @php
+        $total = $notes->count();
+        $todo = $notes->where('category', 'todo')->count();
+        $uncategorized = $notes->where('category', 'uncategorized')->count();
+    @endphp
+
+    <main>
+        <div class="flex h-[calc(100vh-2.5rem)]">
+            @include('components.sidebar', [
+                'notes' => $notes,
+                'total' => $total,
+                'todo' => $todo,
+                'uncategorized' => $uncategorized
+            ])
+
+            @include('components.center', ['notes' => $notes])
+            @include('components.editor', ['notes' => $notes])
         </div>
-    </div>
+    </main>
 </x-app-layout>

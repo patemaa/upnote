@@ -22,11 +22,7 @@
     @include('layouts.navigation')
 
     <main>
-        <div class="flex h-[calc(100%-2.5rem)]"> {{-- Nav yüksekliği: ~2.5rem (h-10) --}}
-            @include('components.sidebar')    {{-- Sol: Klasörler --}}
-            @include('components.center')      {{-- Orta: Not listesi --}}
-            @include('components.editor')     {{-- Sağ: Not düzenleyici --}}
-        </div>
+        {{$slot}}
     </main>
 </div>
 

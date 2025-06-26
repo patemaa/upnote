@@ -7,53 +7,45 @@ use Illuminate\Http\Request;
 
 class NoteController extends Controller
 {
-    public function index()
-    {
-        $notes = Note::latest()->get();
-        $pinnedNotes = $notes->where('is_pinned', true);
-        return view('notes.index', compact('notes', 'pinnedNotes'));
-    }
-
-    public function create()
-    {
-        return view('notes.create');
-    }
-
-    public function show($id)
-    {
-        $note = Note::findOrFail($id);
-        return view('notes.show', compact('note'));
-    }
-
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'nullable|string',
-        ]);
+        public function store(Request $request)
+    {
+        $note = Note::updateOrCreate(
+            ['user_id' => auth()->id()],
+            [
+                'title' => $request->input('title'),
+                'content' => $request->input('content'),
+                'is_pinned' => $request->input('pinned', false),
+                'category' => $request->input('category', 'uncategorized'),
+            ]
+        );
 
-        Note::create([
-            'title' => $request->title,
-            'content' => $request->content,
-        ]);
-
-        return redirect()->route('dashboard');
+        return response()->json(['success' => true, 'note' => $note]);
     }
 
-    public function update(Request $request, $id)
+    public function index(Request $request)
     {
-        $note = Note::findOrFail($id);
+        $query = Note::where('user_id', auth()->id());
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'nullable|string',
+        if ($request->category) {
+            $query->where('category', $request->category);
+        }
+
+        $notes = $query->orderByDesc('pinned')->orderByDesc('updated_at')->get();
+
+        return view('center', compact('notes'));
+    }
+
+    public function count()
+    {
+        $userId = auth()->id();
+
+        return response()->json([
+            'all' => Note::where('user_id', $userId)->count(),
+            'uncategorized' => Note::where('user_id', $userId)->where('category', 'uncategorized')->count(),
+            'todo' => Note::where('user_id', $userId)->where('category', 'todo')->count(),
+            'unsynced' => Note::where('user_id', $userId)->where('category', 'unsynced')->count(),
         ]);
-
-        $note->update([
-            'title' => $request->title,
-            'content' => $request->content,
-        ]);
-
-        return redirect()->back()->with('success', 'Note updated!');
     }
 }
