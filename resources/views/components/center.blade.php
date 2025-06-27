@@ -72,23 +72,25 @@
                         $dom = new \DOMDocument();
                         @$dom->loadHTML('<html><body>' . $note->content . '</body></html>');
 
-                        $paragraphs = $dom->getElementsByTagName('p');
+                        $bodyElement = $dom->getElementsByTagName('body')->item(0);
+                        $lines = [];
 
-                        if ($paragraphs->length > 0) {
-                            $title = trim($paragraphs->item(0)->textContent);
-                        }
-
-                        if ($paragraphs->length > 1) {
-                            $bodyParts = [];
-                            for ($i = 1; $i < $paragraphs->length; $i++) {
-                                $text = trim($paragraphs->item($i)->textContent);
-                                if ($text !== '') {
-                                    $bodyParts[] = $text;
+                        if ($bodyElement) {
+                            foreach ($bodyElement->childNodes as $node) {
+                                if ($node->nodeType === XML_ELEMENT_NODE || $node->nodeType === XML_TEXT_NODE) {
+                                    $text = trim($node->textContent);
+                                    if ($text !== '') {
+                                        $lines[] = $text;
+                                    }
                                 }
                             }
-                            $body = implode(' ', $bodyParts);
                         }
+
+                        $title = $lines[0] ?? '';
+                        $body = implode(' ', array_slice($lines, 1));
                     @endphp
+
+
 
                     <div class="bg-[#2d2e31] rounded p-3 hover:bg-[#35363a] cursor-pointer transition flex items-center justify-between w-52"
                          :class="arranging ? 'opacity-80' : ''"
