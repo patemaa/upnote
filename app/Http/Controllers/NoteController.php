@@ -61,4 +61,22 @@ class NoteController extends Controller
             'unsynced' => Note::where('user_id', $userId)->where('category', 'unsynced')->count(),
         ]);
     }
+    public function content(Note $note)
+    {
+        return response()->json(['content' => $note->content]);
+    }
+
+    public function update(Request $request, Note $note)
+    {
+        $request->validate([
+            'note_content' => 'required|string',
+        ]);
+
+        $note->title = Str::limit(Str::words($request->note_content, 6), 200);
+        $note->content = $request->note_content;
+        $note->save();
+
+        return redirect()->back()->with('success', 'Not başarıyla güncellendi.');
+    }
+
 }

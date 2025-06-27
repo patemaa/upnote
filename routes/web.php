@@ -11,10 +11,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [NoteController::class, 'index'])->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
-    Route::post('/notes/store', [NoteController::class, 'store'])->name('notes.store');
-});
-
+Route::patch('/notes/{note}/update', [NoteController::class, 'update'])->name('notes.update');
 Route::post('/notes/store', [NoteController::class, 'store'])->name('notes.store');
 Route::post('/notes/{note}/assign-notebook', [NoteController::class, 'assignNotebook'])->name('notes.assignNotebook');
 
@@ -45,6 +42,8 @@ Route::post('/notes/reorder', function(Request $request) {
 
     return response()->json(['status' => 'success']);
 })->middleware('auth');
+
+Route::get('/notes/{note}/content', [NoteController::class, 'content']);
 
 
 require __DIR__.'/auth.php';

@@ -1,6 +1,6 @@
 <aside
     x-data="{ openNotes: true, openQuick: true, openNotebooks: true, openTags: true, selected: 'uncategorized' }"
-    class="w-[198px] bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 p-2 overflow-y-auto text-gray-800 dark:text-gray-200 space-y-2 select-none text-xs">
+    class="w-[198px] bg-white dark:bg-[#1e2020] border-r border-gray-200 dark:border-[#0f0f14] p-2 overflow-y-auto text-gray-800 dark:text-gray-200 space-y-2 select-none text-xs">
 
     @php
         $total = $notes->count();
@@ -11,7 +11,7 @@
     {{-- ALL NOTES --}}
     <div class="space-y-1">
         <button @click="openNotes = !openNotes"
-                class="flex items-center justify-between w-full hover:text[#1a1a1a] dark:hover:text-white px-2 py-2 rounded bg-white hover:bg-[#f9f9f9] dark:hover:bg-gray-700 cursor-pointer">
+                class="flex items-center justify-between w-full hover:text[#1a1a1a] dark:hover:text-white px-2 py-2 rounded  hover:bg-[#f9f9f9] dark:hover:bg-[#2d2e31] cursor-pointer">
             <div class="flex items-center gap-1">
                 <svg :class="{ 'rotate-90': openNotes }" class="size-4 text-gray-400 transform transition-transform"
                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -28,8 +28,8 @@
 
         <div x-show="openNotes" x-transition class="ml-8">
             <div @click="selected = 'uncategorized'"
-                 :class="selected === 'uncategorized' ? 'bg-[#f4f4f4] dark:bg-gray-700 dark:text-white' : ''"
-                 class="flex items-center gap-2 hover:bg-[#f9f9f9] dark:hover:text-white px-2 py-2 rounded bg-white dark:hover:bg-gray-700 cursor-pointer transition">
+                 :class="selected === 'uncategorized' ? 'bg-[#f4f4f4] dark:bg-[#2d2e31] dark:text-white' : ''"
+                 class="flex items-center gap-2 hover:bg-[#f9f9f9] dark:hover:text-white px-2 py-2 rounded dark:hover:bg-[#2d2e31] cursor-pointer transition">
                 <svg class="size-4 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg"
                      fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -39,15 +39,15 @@
                 <span>{{ $uncategorized }}</span>
             </div>
             <div @click="selected = 'todo'"
-                 :class="selected === 'todo' ? 'bg-[#f4f4f4] dark:bg-gray-700 dark:text-white' : ''"
-                 class="flex items-center gap-2 hover:bg-[#f9f9f9] dark:hover:text-white px-2 py-2 rounded bg-white dark:hover:bg-gray-700 cursor-pointer transition">
+                 :class="selected === 'todo' ? 'bg-[#f4f4f4] dark:bg-[#2d2e31] dark:text-white' : ''"
+                 class="flex items-center gap-2 hover:bg-[#f9f9f9] dark:hover:text-white px-2 py-2 rounded dark:hover:bg-[#2d2e31] cursor-pointer transition">
                 <x-antdesign-check-square-o class="h-4 w-4 text-red-500 dark:text-red-400"/>
                 <span>Todo</span>
                 <span>{{ $todo }}</span>
             </div>
             <div @click="selected = 'unsynced'"
-                 :class="selected === 'unsynced' ? 'bg-[#f4f4f4] dark:bg-gray-700 dark:text-white' : ''"
-                 class="flex items-center gap-2 hover:bg-[#f9f9f9] dark:hover:text-white px-2 py-2 rounded bg-white dark:hover:bg-gray-700 cursor-pointer transition">
+                 :class="selected === 'unsynced' ? 'bg-[#f4f4f4] dark:bg-[#2d2e31] dark:text-white' : ''"
+                 class="flex items-center gap-2 hover:bg-[#f9f9f9] dark:hover:text-white px-2 py-2 rounded dark:hover:bg-[#2d2e31] cursor-pointer transition">
                 <x-coolicon-cloud-off class="h-4 w-4 text-pink-500 dark:text-pink-400"/>
                 <span>Unsynced</span>
             </div>
@@ -57,7 +57,7 @@
     {{-- QUICK ACCESS --}}
     <div class="space-y-1">
         <button @click="openQuick = !openQuick"
-                class="flex items-center justify-between w-full hover:text-white px-2 py-2 rounded  dark:hover:bg-gray-700 cursor-pointer">
+                class="flex items-center justify-between w-full hover:text-white px-2 py-2 rounded  dark:hover:bg-[#2d2e31] cursor-pointer">
             <div class="flex items-center gap-1">
                 <svg :class="{ 'rotate-90': openQuick }"
                      class="size-4 text-gray-400 transform transition-transform"
@@ -76,7 +76,7 @@
     {{-- NOTEBOOKS --}}
     <div class="space-y-1">
         <button @click="openNotebooks = !openNotebooks"
-                class="flex items-center justify-between w-full hover:text-white px-2 py-2 rounded dark:hover:bg-gray-700 cursor-pointer">
+                class="flex items-center justify-between w-full hover:text-white px-2 py-2 rounded dark:hover:bg-[#2d2e31] cursor-pointer">
             <div class="flex items-center gap-1">
                 <svg :class="{ 'rotate-90': openNotebooks }"
                      class="size-4 text-gray-400 transform transition-transform"
@@ -96,7 +96,7 @@
     {{-- TAGS --}}
     <div class="space-y-1">
         <button @click="openTags = !openTags"
-                class="flex items-center justify-between w-full hover:text-white px-2 py-2 rounded dark:hover:bg-gray-700 cursor-pointer">
+                class="flex items-center justify-between w-full hover:text-white px-2 py-2 rounded dark:hover:bg-[#2d2e31] cursor-pointer">
             <div class="flex items-center gap-1">
                 <svg :class="{ 'rotate-90': openTags }"
                      class="size-4 text-gray-400 transform transition-transform"
@@ -113,13 +113,13 @@
     </div>
 
     {{-- TEMPLATES & TRASH --}}
-    <div class="flex items-center justify-between hover:text-white px-2 py-2 rounded cursor-pointer ml-5 dark:hover:bg-gray-700">
+    <div class="flex items-center justify-between hover:text-white px-2 py-2 rounded cursor-pointer ml-5 dark:hover:bg-[#2d2e31]">
         <div class="flex items-center gap-1">
             <span class="text-[#037ac6] dark:text-blue-400 font-bold">Templates</span>
         </div>
     </div>
 
-    <div class="flex items-center justify-between hover:text-white px-2 py-2 rounded cursor-pointer ml-5  dark:hover:bg-gray-700">
+    <div class="flex items-center justify-between hover:text-white px-2 py-2 rounded cursor-pointer ml-5  dark:hover:bg-[#2d2e31]">
         <div class="flex items-center gap-1">
             <span class="text-[#037ac6] dark:text-blue-400 font-bold">Trash</span>
         </div>
