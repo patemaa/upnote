@@ -34,9 +34,9 @@
                     </svg>
                 </button>
 
-                <div x-transition x-show="open" class="space-y-3 px-2 py-2 bg-[#1e2020]">
+                <div x-transition x-show="open" class="space-y-3 px-3 py-3 pl-4 bg-[#1e2020]">
                     <div
-                        class="bg-[#2d2e31] rounded-[4px] p-3 flex justify-between items-start transition-all cursor-pointer">
+                        class="bg-[#2d2e31] rounded-[4px] p-3 flex justify-between items-start transition-all cursor-pointer w-52">
                         <div>
                             <div
                                 class="text-sm font-semibold text-white flex items-center gap-2 rounded">
@@ -58,28 +58,46 @@
             <div x-show="open" class="space-y-3 px-2 py-2 bg-[#1e2020]">
                 <div
                     class="bg-[#1e2020] rounded-[4px] flex justify-between items-start transition-all cursor-pointer">
-{{--                    <div>--}}
-{{--                        <span class="font-medium text-sm">Title</span>--}}
-{{--                        <p class="text-xs text-gray-400 mt-1 truncate max-w-[180px] font-medium">Content</p>--}}
-{{--                        <span class="text-xs text-gray-500 mt-1 block">Date</span>--}}
-{{--                    </div>--}}
                     <div x-show="open" class="space-y-3 px-2 py-2 bg-[#1e2020] overflow-y-auto custom-scrollbar max-h-[calc(100vh-300px)]">
                         @foreach($notes->sortByDesc('is_pinned') as $note)
-                            <div class="bg-[#2d2e31] rounded p-3 hover:bg-[#35363a] cursor-pointer transition"
+                            @php
+                                $title = '';
+                                $body = '';
+
+                                $dom = new \DOMDocument();
+
+                                // Hataları bastırmak için @ kullanıyoruz
+                                @$dom->loadHTML('<html><body>' . $note->content . '</body></html>');
+
+                                $paragraphs = $dom->getElementsByTagName('p');
+
+                                if ($paragraphs->length > 0) {
+                                    $title = $paragraphs->item(0)->textContent;
+                                }
+
+                                if ($paragraphs->length > 1) {
+                                    for ($i = 1; $i < $paragraphs->length; $i++) {
+                                        $body .= $paragraphs->item($i)->textContent . ' ';
+                                    }
+                                    $body = trim($body);
+                                }
+                            @endphp
+
+                            <div class="bg-[#2d2e31] rounded p-3 hover:bg-[#35363a] cursor-pointer transition w-52"
                                  @click="openNote({{ $note->id }})">
                                 <div class="text-sm font-bold text-white flex items-center gap-2 truncate">
                                     @if($note->is_pinned)
                                         <x-hugeicons-pin class="w-4 h-4 text-[#4889ed]" stroke-width="1"/>
                                     @endif
-                                    {{ $note->title }}
+                                    {{ $title }}
                                 </div>
-                                <p class="text-xs text-gray-400 mt-1 truncate max-w-[180px]">{!! \Illuminate\Support\Str::limit(strip_tags($note->content), 100) !!}</p>
-                                <span class="text-xs text-gray-500 mt-1 block">{{ $note->updated_at->diffForHumans() }}</span>
+                                <p class="text-xs text-gray-400 mt-1 truncate max-w-[180px]">
+                                    {{ Str::limit($body, 100, '...') }}
+                                </p>
+                                <span class="text-xs text-gray-500 mt-1 block">{{ $note->updated_at->setTimezone('Europe/Istanbul')->format('M j, g:iA') }}</span>
                             </div>
                         @endforeach
                     </div>
-
-
                 </div>
             </div>
             <div>
