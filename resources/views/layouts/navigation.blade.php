@@ -1,4 +1,4 @@
-<nav class="h-10 bg-[#1e2020] text-gray-200 border-b border-[#0f0f14] flex items-center justify-between px-3">
+<nav class="h-9 bg-white dark:bg-[#1e2020] text-[#707070] dark:text-gray-200 border-b border-[#0f0f14] flex items-center justify-between px-3">
     {{-- Sol taraf: Menü, Geri/İleri, Arama --}}
     <div class="flex items-center">
         <!-- Menü ikonu -->
@@ -26,7 +26,7 @@
         </button>
 
         <!-- Arama kutusu -->
-        <div class="flex items-center bg-[#1a1a1a] rounded px-1.5 py-0.5 w-[268px] border border-gray-600 hover:border-blue-500 duration-300">
+        <div class="flex items-center bg-white dark:bg-[#1a1a1a] rounded px-1.5 w-[268px] border border-[#d8d8d8] hover:border-[#2a7dc6] dark:border-gray-600 dark:hover:border-blue-500 duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400" fill="none"
                  viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -39,7 +39,7 @@
     </div>
 
     {{-- Sağ taraf: New Note, diğer ikonlar --}}
-    <div class="flex items-center space-x-5">
+    <div class="flex items-center space-x-2">
         <!-- New Note -->
         <x-button>New Note</x-button>
 

@@ -19,7 +19,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-sans antialiased overflow-hidden" >
-<div class="bg-gray-100 dark:bg-[#1e2020] text-black dark:text-gray-200">
+<div class="bg-white dark:bg-[#1e2020] text-black dark:text-gray-200">
     @include('layouts.navigation')
 
     <main>
