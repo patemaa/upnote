@@ -1,4 +1,4 @@
-<section class="flex-1 overflow-y-auto flex flex-col min-h-screen bg-[#1e2020]">
+<section class="flex-1 overflow-y-auto flex flex-col  bg-[#1e2020]">
     <div class="bg-[#27282b] h-[31.5px] p-1 flex items-center justify-between">
         <div class="flex items-center space-x-5 ">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
@@ -47,7 +47,7 @@
             </svg>
         </div>
 
-        <div class="mr-4">
+        <div class="mr-4 flex items-center space-x-3 ml-3">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                  stroke="currentColor" class="size-5 text-gray-300 hover:text-gray-400 cursor-pointer">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -57,7 +57,7 @@
     </div>
 
 
-    <div id="editor-wrapper" class="h-screen w-full overflow-hidden border-t-[1px] border-[#0f0f14]">
+    <div id="editor-wrapper" class="border-t-[1px] border-[#0f0f14] custom-scrollbar">
         <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
 
         <style>
@@ -71,14 +71,14 @@
             .ck.ck-editor__editable {
                 background-color: #1e2020 !important;
                 color: white !important;
-                min-height: calc(100vh - 50px);
-                max-height: calc(100vh - 50px);
+                min-height: calc(530px);
+                max-height: calc(550px);
                 overflow-y: auto;
+                overflow-x: auto;
                 padding: 1rem !important;
                 font-family: system-ui, sans-serif;
                 font-size: .67em;
                 border: #0f0f14;
-
             }
 
             .ck-content h1 {
@@ -166,52 +166,109 @@
                 border: none;
             }
         </style>
-
-
-        <div id="editor"></div>
-
-        <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
-
-        <script>
-            let editorInstance;
-
-            ClassicEditor
-                .create(document.querySelector('#editor'))
-                .then(editor => {
-                    editorInstance = editor;
-
-                    editor.model.document.on('change:data', () => {
-                        const content = editor.getData();
-                        const title = content.replace(/<[^>]+>/g, '').split('\n')[0] || 'Untitled';
-
-                        clearTimeout(window.saveTimer);
-
-                        window.saveTimer = setTimeout(() => {
-                            fetch("{{ route('notes.store') }}", {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                                },
-                                body: JSON.stringify({
-                                    title: title,
-                                    content: content,
-                                    pinned: false,
-                                    category: 'uncategorized'
-                                })
-                            })
-                                .then(res => res.json())
-                                .then(data => {
-                                    console.log("Not kaydedildi", data);
-                                    // Otomatik refresh ya da fetch isteği yapılabilir
-                                });
-                        }, 1000);
-                    });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        </script>
-
     </div>
+
+
+    <form method="POST" action="{{ route('notes.store') }}" id="noteForm">
+        @csrf
+        <input type="hidden" name="title" id="noteTitle">
+        <textarea name="note_content" id="noteContent" hidden></textarea>
+
+        <div id="editor" class="text-white min-h-[600px] px-4 py-2"></div>
+
+        <div x-data="{ open: false }" class="flex justify-center">
+            <div class="flex px-4 py-1.5 space-x-2 items-center rounded bg-[#27282b]">
+                {{-- WRAP BUTTON + DROPDOWN --}}
+                <div class="relative">
+                    <button @click="open = !open"
+                            type="button"
+                            class="flex items-center space-x-2 h-[28px] pr-20 pl-3 rounded bg-[#4f5157] hover:bg-[#494b4f] text-[13px]">
+                        <x-majestic-book-plus-line class="w-4 h-4"/>
+                        <span>Add To Notebooks</span>
+                    </button>
+
+
+                    {{-- DROPDOWN --}}
+                    <div x-show="open" @click.outside="open = false"
+                         x-transition
+                         class="absolute bottom-[calc(100%+8px)] left-0 w-[228px] bg-[#2c2c2e] text-sm text-white rounded-md shadow-xl border border-[#3a3a3c] z-50">
+                        <div class="px-3 py-2 border-b border-[#3a3a3c] text-[13px] font-semibold">Add to notebooks
+                        </div>
+                        <div class="px-3 py-2 border-b border-[#3a3a3c]">
+                            <input type="text"
+                                   placeholder="Search"
+                                   class="w-full px-2 py-1 rounded bg-[#3a3a3c] placeholder-gray-400 text-gray-200 text-sm focus:outline-none"/>
+                        </div>
+
+                        <div class="max-h-60 overflow-y-auto custom-scrollbar">
+                            @foreach($notebooks as $notebook)
+                                <div
+                                    class="flex items-center justify-between px-3 py-2 hover:bg-[#3a3a3c] cursor-pointer"
+                                    @click="assignNotebook({{ $notebook->id }})"
+                                >
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 bg-purple-600 rounded-sm"></div>
+                                        <span class="text-sm">{{ $notebook->name }}</span>
+                                    </div>
+                                    <span class="text-xs text-gray-400">{{ $notebook->notes_count }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+
+                    </div>
+                </div>
+
+                {{-- SAVE butonu --}}
+                <button type="submit"
+                        class="h-[28px] px-3 rounded bg-[#4f5157] hover:bg-[#494b4f] text-[13px]">
+                    Save
+                </button>
+            </div>
+        </div>
+
+    </form>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+    <script>
+        let editorInstance;
+
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .then(editor => {
+                editorInstance = editor;
+
+                // Form gönderilmeden önce veriyi textarea'ya yaz
+                document.getElementById('noteForm').addEventListener('submit', function (e) {
+                    const content = editor.getData();
+                    const title = content.replace(/<[^>]+>/g, '').split('\n')[0] || 'Untitled';
+
+                    document.getElementById('noteContent').value = content;
+                    document.getElementById('noteTitle').value = title;
+                });
+            })
+            .catch(error => {
+                console.error('CKEditor hatası:', error);
+            });
+
+        function assignNotebook(notebookId) {
+            fetch(`/notes/{{ $note->id }}/assign-notebook`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({notebook_id: notebookId})
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Notebook başarıyla atandı.');
+                    } else {
+                        alert('Bir hata oluştu.');
+                    }
+                });
+        }
+    </script>
+
+
 </section>

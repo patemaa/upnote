@@ -3,38 +3,51 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\Notebook;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class NoteController extends Controller
 {
-    public function store(Request $request)
-    {
         public function store(Request $request)
     {
-        $note = Note::updateOrCreate(
-            ['user_id' => auth()->id()],
-            [
-                'title' => $request->input('title'),
-                'content' => $request->input('content'),
-                'is_pinned' => $request->input('pinned', false),
-                'category' => $request->input('category', 'uncategorized'),
-            ]
-        );
+        $request->validate([
+            'note_content' => 'required|string',
+        ]);
 
-        return response()->json(['success' => true, 'note' => $note]);
+        $note = new Note();
+        $note->title = Str::limit(Str::words($request->note_content, 6), 200);
+        $note->content = $request->note_content;
+        $note->category = 'uncategorized';
+        $note->is_pinned = false;
+        $note->user_id = auth()->id(); // giriş yapmış kullanıcı için
+        $note->save();
+
+        return redirect()->back()->with('success', 'Not başarıyla kaydedildi.');
     }
 
-    public function index(Request $request)
+    public function assignNotebook(Request $request, Note $note)
     {
-        $query = Note::where('user_id', auth()->id());
+        $request->validate([
+            'notebook_id' => 'required|exists:notebooks,id',
+        ]);
 
-        if ($request->category) {
-            $query->where('category', $request->category);
-        }
+        $note->update(['notebook_id' => $request->notebook_id]);
 
-        $notes = $query->orderByDesc('pinned')->orderByDesc('updated_at')->get();
+        return response()->json(['success' => true]);
+    }
 
-        return view('center', compact('notes'));
+    public function index()
+    {
+        $notes = Note::where('user_id', auth()->id())
+            ->orderByDesc('pinned')
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $note = $notes->first() ?? new Note();
+        $notebooks = Notebook::withCount('notes')->get();
+
+        return view('dashboard', compact('notes', 'note', 'notebooks'));
     }
 
     public function count()

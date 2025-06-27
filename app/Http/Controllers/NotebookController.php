@@ -2,32 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notebook;
 use Illuminate\Http\Request;
+use App\Models\Notebook;
+
 class NotebookController extends Controller
 {
-    public function index()
-    {
-        $notebooks = Notebook::withCount('notes')->get();
-        return view('notebooks.index', compact('notebooks'));
-    }
-
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        Notebook::create([
+        $notebook = Notebook::create([
             'name' => $request->name,
+            'user_id' => auth()->id(),
         ]);
 
-        return redirect()->back()->with('success', 'Notebook created!');
+        // Eğer AJAX çağrısı ise JSON döndür
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'notebook' => $notebook]);
+        }
+
+        return redirect()->back()->with('success', 'Notebook oluşturuldu.');
     }
 
-    public function show($id)
-    {
-        $notebook = Notebook::with('notes')->findOrFail($id);
-        return view('notebooks.show', compact('notebook'));
-    }
 }

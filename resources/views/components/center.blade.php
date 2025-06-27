@@ -57,24 +57,28 @@
 
             <div x-show="open" class="space-y-3 px-2 py-2 bg-[#1e2020]">
                 <div
-                    class="bg-[#1e2020] rounded-[4px] p-3 flex justify-between items-start transition-all cursor-pointer">
+                    class="bg-[#1e2020] rounded-[4px] flex justify-between items-start transition-all cursor-pointer">
 {{--                    <div>--}}
 {{--                        <span class="font-medium text-sm">Title</span>--}}
 {{--                        <p class="text-xs text-gray-400 mt-1 truncate max-w-[180px] font-medium">Content</p>--}}
 {{--                        <span class="text-xs text-gray-500 mt-1 block">Date</span>--}}
 {{--                    </div>--}}
-                    @foreach($notes->sortByDesc('is_pinned') as $note)
-                        <div class="bg-[#2d2e31] rounded p-3 mb-2">
-                            <div class="text-sm font-bold text-white flex items-center gap-2">
-                                @if($note->is_pinned)
-                                    <x-hugeicons-pin class="w-4 h-4 text-[#4889ed]" stroke-width="1"/>
-                                @endif
-                                {{ $note->title }}
+                    <div x-show="open" class="space-y-3 px-2 py-2 bg-[#1e2020] overflow-y-auto custom-scrollbar max-h-[calc(100vh-300px)]">
+                        @foreach($notes->sortByDesc('is_pinned') as $note)
+                            <div class="bg-[#2d2e31] rounded p-3 hover:bg-[#35363a] cursor-pointer transition"
+                                 @click="openNote({{ $note->id }})">
+                                <div class="text-sm font-bold text-white flex items-center gap-2 truncate">
+                                    @if($note->is_pinned)
+                                        <x-hugeicons-pin class="w-4 h-4 text-[#4889ed]" stroke-width="1"/>
+                                    @endif
+                                    {{ $note->title }}
+                                </div>
+                                <p class="text-xs text-gray-400 mt-1 truncate max-w-[180px]">{!! \Illuminate\Support\Str::limit(strip_tags($note->content), 100) !!}</p>
+                                <span class="text-xs text-gray-500 mt-1 block">{{ $note->updated_at->diffForHumans() }}</span>
                             </div>
-                            <p class="text-xs text-gray-400 mt-1 truncate max-w-[180px]">{!! \Illuminate\Support\Str::limit(strip_tags($note->content), 100) !!}</p>
-                            <span class="text-xs text-gray-500 mt-1 block">{{ $note->updated_at->diffForHumans() }}</span>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+
 
                 </div>
             </div>

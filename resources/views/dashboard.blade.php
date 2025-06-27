@@ -12,7 +12,7 @@
     @endphp
 
     <main>
-        <div class="flex h-[calc(100vh-2.5rem)]">
+        <div class="flex">
             @include('components.sidebar', [
                 'notes' => $notes,
                 'total' => $total,
@@ -21,7 +21,17 @@
             ])
 
             @include('components.center', ['notes' => $notes])
-            @include('components.editor', ['notes' => $notes])
+            @if(isset($note) && isset($notebooks))
+                @include('components.editor', [
+                    'notes' => $notes,
+                    'note' => $note,
+                    'notebooks' => $notebooks
+                ])
+            @endif
+
+
+
+
         </div>
     </main>
 </x-app-layout>

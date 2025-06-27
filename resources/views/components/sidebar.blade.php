@@ -1,6 +1,6 @@
 <aside
     x-data="{ openNotes: true, openQuick: true, openNotebooks: true, openTags: true, selected: 'uncategorized' }"
-    class="min-h-screen w-[198px] bg-[#1e2020] border-r border-[#0f0f14] p-2 overflow-y-auto text-gray-300 space-y-2 select-none text-xs">
+    class="w-[198px] bg-[#1e2020] border-r border-[#0f0f14] p-2 overflow-y-auto text-gray-300 space-y-2 select-none text-xs">
 
     @php
         $total = $notes->count();

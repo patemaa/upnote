@@ -3,30 +3,20 @@
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Models\Note;
 
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    $notes = Note::where('user_id', auth()->id())
-        ->orderByDesc('is_pinned')
-        ->orderByDesc('updated_at')
-        ->get();
-
-    return view('dashboard', compact('notes'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [NoteController::class, 'index'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/notes/store', [NoteController::class, 'store'])->name('notes.store');
-    Route::get('/dashboard', function () {
-        $notes = \App\Models\Note::where('user_id', auth()->id())->get();
-        return view('dashboard', compact('notes'));
-    })->name('dashboard');
 });
 
+Route::post('/notes/store', [NoteController::class, 'store'])->name('notes.store');
+Route::post('/notes/{note}/assign-notebook', [NoteController::class, 'assignNotebook'])->name('notes.assignNotebook');
 
 Route::get('/create', [NoteController::class, 'create'])->name('notes.create');
 Route::post('/store', [NoteController::class, 'store'])->name('notes.store');
