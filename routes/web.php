@@ -33,4 +33,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notes/counts', [NoteController::class, 'count'])->name('notes.count');
 });
 
+use Illuminate\Http\Request;
+use App\Models\Note;
+
+Route::post('/notes/reorder', function(Request $request) {
+    $order = $request->input('order', []);
+
+    foreach ($order as $index => $id) {
+        Note::where('id', $id)->update(['order' => $index]);
+    }
+
+    return response()->json(['status' => 'success']);
+})->middleware('auth');
+
+
 require __DIR__.'/auth.php';
