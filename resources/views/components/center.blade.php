@@ -4,17 +4,17 @@
     <div class="container mx-auto flex justify-between items-center mb-3">
         <div class="w-60 dark:bg-[#1e2020] rounded shadow">
             <div
-                class="bg-[#f7f7f7] dark:bg-[#27282b] h-8 p-1 justify-between pl-3 pt-2.5 pb-3 border-b dark:border-[#0f0f14] flex items-center gap-2 px-3">
+                class="bg-[#f7f7f7] dark:bg-[#27282b] h-8 justify-between border-b dark:border-[#0f0f14] flex items-center gap-2 px-3">
                 <div>
-                    <span class="text-[15px]">Get Started</span>
+                    <span class="text-[15px] text-gray-600">Get Started</span>
                 </div>
                 <div class="flex items-center space-x-3 pt-1">
                     <div
                         @click="toggleArrange()"
                         :class="arranging ? 'dark:bg-gray-700 dark:text-blue-400' : 'dark:hover:text-gray-400'"
-                        class="flex items-center px-1 py-1 rounded cursor-pointer transition">
+                        class="flex items-center rounded cursor-pointer transition">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-4" :class="arranging ? 'dark:text-blue-400' : 'dark:text-gray-200 dark:hover:text-gray-400'">
+                             stroke="currentColor" class="size-6 px-1 py-1 rounded" :class="arranging ? 'bg-[#e4f2fe] text-[#037ac6] dark:text-blue-400' : 'dark:text-gray-200 dark:hover:text-gray-400'">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"/>
                         </svg>
