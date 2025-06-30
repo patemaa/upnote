@@ -1,12 +1,41 @@
 <section class="flex-1 overflow-y-auto flex flex-col  dark:bg-[#1e2020]">
     <div class="dark:bg-[#27282b] h-[31.5px] p-1 flex items-center justify-between">
         <div class="flex items-center space-x-5 ">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                 stroke="currentColor"
-                 class="size-4 ml-6 text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 cursor-pointer dark:text-gray-200">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
+            <div x-data="{ open: false }">
+                <svg @click="open = !open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     class="size-4 ml-6 text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 cursor-pointer dark:text-gray-200">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+
+                <div x-show="open" @click.away="open = false" x-transition
+                     class="absolute mt-1 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50 text-[12px]">
+
+                    <!-- Menü Öğeleri -->
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-image-01 class="w-3.5 h-3.5"/>
+                        Insert Image
+                    </a>
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-folder-add class="w-3.5 h-3.5"/>
+                        Insert File
+                    </a>
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-table class="w-3.5 h-3.5"/>
+                        Insert Table
+                    </a>
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-calendar-add-01 class="w-3.5 h-3.5"/>
+                        Insert Date
+                    </a>
+                </div>
+            </div>
 
             <div class="flex items-center space-x-3" x-data="{ isPinned: false, isStarred: false }">
                 <div
@@ -33,9 +62,13 @@
                 </div>
             </div>
 
-            <x-hugeicons-clock-02
-                class="w-4 h-4 dark:hover:text-gray-400 cursor-pointer text-gray-500 hover:text-gray-600 dark:text-gray-300"
-                stroke-width="2"/>
+            <div x-data="{ showHistory: false }">
+                <x-hugeicons-clock-02
+                    @click="showHistory = !showHistory"
+                    class="w-4 h-4 dark:hover:text-gray-400 cursor-pointer text-gray-500 hover:text-gray-600 dark:text-gray-300"
+                    stroke-width="2"/>
+                <x-history :note="$note" ></x-history>
+            </div>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                  stroke="currentColor"
                  class="size-4 text-gray-500 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-400 cursor-pointer">
@@ -60,7 +93,6 @@
         </div>
     </div>
 
-
     <div id="editor-wrapper" class="border-t-[1px] dark:border-[#0f0f14] custom-scrollbar">
         <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
 
@@ -76,7 +108,7 @@
                 background-color: #fff !important;
                 color: #000 !important;
                 min-height: 530px;
-                max-height: 550px;
+                max-height: 530px;
                 overflow-y: auto;
                 overflow-x: auto;
                 padding: 1rem !important;
@@ -208,7 +240,6 @@
         </style>
     </div>
 
-
     <form method="POST"
           action="{{ $note->exists ? route('notes.update', $note) : route('notes.store') }}"
           id="noteForm">
@@ -217,13 +248,16 @@
             @method('PATCH')
         @endif
 
+        <input type="hidden" name="note_id" value="{{ $note->id }}">
+
+
         <input type="hidden" name="title" id="noteTitle">
         <textarea name="note_content" id="noteContent" hidden></textarea>
 
         <div id="editor" class="dark:text-white min-h-[600px] px-4 py-2"></div>
 
-        <div x-data="{ open: false }" class="flex justify-center">
-            <div class="flex px-4 py-1.5 space-x-2 items-center rounded dark:bg-[#27282b] bg-[#f8f8f8]">
+        <div x-data="{ open: false }" class="flex justify-center dark:bg-[#27282b] bg-[#f8f8f8] border border-b-gray-200">
+            <div class="flex px-4 py-1.5 space-x-2 items-center rounded ">
                 {{-- WRAP BUTTON + DROPDOWN --}}
                 <div class="relative">
                     <button @click="open = !open"
@@ -278,7 +312,6 @@
                 </button>
             </div>
         </div>
-
     </form>
 
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
@@ -324,7 +357,13 @@
                     }
                 });
         }
+
+        document.getElementById('noteForm').addEventListener('submit', function (e) {
+            const content = editorInstance.getData();
+            const title = content.replace(/<[^>]+>/g, '').split('\n')[0] || 'Untitled';
+
+            document.getElementById('noteContent').value = content;
+            document.getElementById('noteTitle').value = title;
+        });
     </script>
-
-
 </section>

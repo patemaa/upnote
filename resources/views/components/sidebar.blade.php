@@ -1,6 +1,6 @@
 <aside
     x-data="{ openNotes: true, openQuick: true, openNotebooks: true, openTags: true, selected: 'uncategorized' }"
-    class="w-[198px] bg-white dark:bg-[#1e2020] border-r border-gray-200 dark:border-[#0f0f14] p-2 overflow-y-auto text-gray-800 dark:text-gray-200 space-y-2 select-none text-xs">
+    class="border border-b-gray-200 h-[644px] w-[198px] bg-white dark:bg-[#1e2020] border-r border-gray-200 dark:border-[#0f0f14] p-2 overflow-y-auto text-gray-800 dark:text-gray-200 space-y-2 select-none text-xs">
 
     @php
         $total = $notes->count();
@@ -8,7 +8,7 @@
         $uncategorized = $notes->where('category', 'uncategorized')->count();
     @endphp
 
-    {{-- ALL NOTES --}}
+    {{-- ALL NOTES --}}  ac
     <div class="space-y-1">
         <button @click="openNotes = !openNotes"
                 class="flex items-center justify-between w-full hover:text[#1a1a1a] dark:hover:text-white px-2 py-2 rounded  hover:bg-[#f9f9f9] dark:hover:bg-[#2d2e31] cursor-pointer">

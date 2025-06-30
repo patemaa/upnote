@@ -4,12 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\Note;
 use App\Models\Notebook;
+use App\Models\NoteVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class NoteController extends Controller
 {
-        public function store(Request $request)
+    public function index()
+    {
+        $notes = Note::where('user_id', auth()->id())
+            ->orderByDesc('pinned')
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $note = $activeNote ?? ($notes->first() ?? new Note());
+        $notebooks = Notebook::withCount('notes')->get();
+
+        return view('dashboard', compact('notes', 'note', 'notebooks'));
+    }
+    public function create()
+    {
+        return view('dashboard', [
+            'note' => new Note(),
+            'notes' => Note::where('user_id', auth()->id())->latest()->get(),
+            'notebooks' => Notebook::where('user_id', auth()->id())->get(),
+        ]);
+    }
+    public function store(Request $request)
     {
         $request->validate([
             'note_content' => 'required|string',
@@ -23,9 +44,8 @@ class NoteController extends Controller
         $note->user_id = auth()->id(); // giriş yapmış kullanıcı için
         $note->save();
 
-        return redirect()->back()->with('success', 'Not başarıyla kaydedildi.');
+        return redirect('dashboard')->with('success', 'Not başarıyla kaydedildi.');
     }
-
     public function assignNotebook(Request $request, Note $note)
     {
         $request->validate([
@@ -36,20 +56,6 @@ class NoteController extends Controller
 
         return response()->json(['success' => true]);
     }
-
-    public function index()
-    {
-        $notes = Note::where('user_id', auth()->id())
-            ->orderByDesc('pinned')
-            ->orderByDesc('updated_at')
-            ->get();
-
-        $note = $notes->first() ?? new Note();
-        $notebooks = Notebook::withCount('notes')->get();
-
-        return view('dashboard', compact('notes', 'note', 'notebooks'));
-    }
-
     public function count()
     {
         $userId = auth()->id();
@@ -65,18 +71,34 @@ class NoteController extends Controller
     {
         return response()->json(['content' => $note->content]);
     }
-
     public function update(Request $request, Note $note)
     {
         $request->validate([
             'note_content' => 'required|string',
         ]);
 
-        $note->title = Str::limit(Str::words($request->note_content, 6), 200);
-        $note->content = $request->note_content;
-        $note->save();
+        NoteVersion::create([
+            'note_id' => $note->id,
+            'content' => $note->content,
+            'saved_at' => now(),
+        ]);
+
+        $note->update([
+            'title' => Str::limit(Str::words($request->note_content, 6), 200),
+            'content' => $request->note_content,
+        ]);
 
         return redirect()->back()->with('success', 'Not başarıyla güncellendi.');
+    }
+    public function restoreVersion(Note $note, NoteVersion $version)
+    {
+        // Notu versiyon içeriğiyle geri yükle
+        $note->update([
+            'content' => $version->content,
+            'title' => Str::limit(Str::words($version->content, 6), 200),
+        ]);
+
+        return redirect()->back()->with('success', 'Versiyon geri yüklendi.');
     }
 
 }
