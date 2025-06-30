@@ -1,4 +1,4 @@
-<section class="w-60 dark:bg-[#1e2020] border-r dark:border-[#0f0f14] overflow-y-auto dark:text-gray-200 min-h-screen"
+<section class="w-64 dark:bg-[#1e2020] border-r dark:border-[#0f0f14] dark:text-gray-200 h-[644px]"
          x-data="notesList()" x-init="initSortable()">
 
     <div class="container mx-auto flex justify-between items-center mb-3">
@@ -14,7 +14,8 @@
                         :class="arranging ? 'dark:bg-gray-700 dark:text-blue-400' : 'dark:hover:text-gray-400'"
                         class="flex items-center rounded cursor-pointer transition">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-6 px-1 py-1 rounded" :class="arranging ? 'bg-[#e4f2fe] text-[#037ac6] dark:text-blue-400' : 'dark:text-gray-200 dark:hover:text-gray-400'">
+                             stroke="currentColor" class="size-6 px-1 py-1 rounded"
+                             :class="arranging ? 'bg-[#e4f2fe] text-[#037ac6] dark:text-blue-400' : 'dark:text-gray-200 dark:hover:text-gray-400'">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"/>
                         </svg>
@@ -65,7 +66,7 @@
                 :class="arranging ? 'cursor-move' : ''">
 
 
-            @foreach($notes->sortBy('order') as $note)
+                @foreach($notes->sortBy('order') as $note)
                     @php
                         $title = '';
                         $body = '';
@@ -115,7 +116,8 @@
 
                         <template x-if="arranging">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                 stroke="currentColor" class="w-5 h-5 cursor-move ml-3 select-none dark:hover:text-gray-400">
+                                 stroke="currentColor"
+                                 class="w-5 h-5 cursor-move ml-3 select-none dark:hover:text-gray-400">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16"/>
                             </svg>
                         </template>
