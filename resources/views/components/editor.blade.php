@@ -45,15 +45,9 @@
                                      stroke-width="2"/>
                 </div>
 
-                <div
-                    id="favoriteBtn"
-                    class="flex items-center px-1 py-1 rounded cursor-pointer transition
-    {{ $note->is_favorite ? 'bg-[#e4f2fe] text-[#1182c9] dark:bg-gray-700 dark:text-blue-400' : 'text-gray-500 hover:text-gray-600 dark:hover:text-white' }}">
-
-
+                <div id="favoriteBtn" class="flex items-center px-1 py-1 rounded cursor-pointer transition {{ $note->is_favorite ? 'bg-[#e4f2fe] text-[#1182c9] dark:bg-gray-700 dark:text-blue-400' : 'text-gray-500 hover:text-gray-600 dark:hover:text-white' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                         stroke="currentColor"
-                         class="size-4 transition"
+                         stroke="currentColor" class="size-4 transition"
                          x-bind:class="isStarred ? 'dark:text-blue-400' : 'dark:text-gray-300 dark:hover:text-gray-400'">
                         <path stroke-linecap="round" stroke-linejoin="round"
                               d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/>

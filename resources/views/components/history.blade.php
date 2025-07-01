@@ -1,5 +1,5 @@
 @props(['note'])
-<div x-cloak x-show="showHistory" abc @click.self="showHistory = false"
+<div x-cloak x-show="showHistory" @click.self="showHistory = false"
      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]">
     <div class="bg-white p-4 w-[700px] h-[500px] overflow-y-auto rounded shadow dark:bg-[#1e2020]">
         <h2 class="text-lg font-semibold mb-3 dark:text-white">Version History</h2>

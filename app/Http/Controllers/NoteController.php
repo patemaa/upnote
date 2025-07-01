@@ -52,37 +52,8 @@ class NoteController extends Controller
         $note->user_id = auth()->id(); // giriş yapmış kullanıcı için
         $note->save();
 
-        return redirect('dashboard')->with('success', 'Not başarıyla kaydedildi.');
+        return redirect()->route('dashboard', ['note_id' => $note->id]);
     }
-
-    public function assignNotebook(Request $request, Note $note)
-    {
-        $request->validate([
-            'notebook_id' => 'required|exists:notebooks,id',
-        ]);
-
-        $note->update(['notebook_id' => $request->notebook_id]);
-
-        return response()->json(['success' => true]);
-    }
-
-    public function count()
-    {
-        $userId = auth()->id();
-
-        return response()->json([
-            'all' => Note::where('user_id', $userId)->count(),
-            'uncategorized' => Note::where('user_id', $userId)->where('category', 'uncategorized')->count(),
-            'todo' => Note::where('user_id', $userId)->where('category', 'todo')->count(),
-            'unsynced' => Note::where('user_id', $userId)->where('category', 'unsynced')->count(),
-        ]);
-    }
-
-    public function content(Note $note)
-    {
-        return response()->json(['content' => $note->content]);
-    }
-
     public function update(Request $request, Note $note)
     {
         $request->validate([
@@ -100,12 +71,26 @@ class NoteController extends Controller
             'content' => $request->note_content,
         ]);
 
-        return redirect()->back()->with('success', 'Not başarıyla güncellendi.');
+        return redirect()->route('dashboard', ['note_id' => $note->id]);
+    }
+    public function count()
+    {
+        $userId = auth()->id();
+
+        return response()->json([
+            'all' => Note::where('user_id', $userId)->count(),
+            'uncategorized' => Note::where('user_id', $userId)->where('category', 'uncategorized')->count(),
+            'todo' => Note::where('user_id', $userId)->where('category', 'todo')->count(),
+            'unsynced' => Note::where('user_id', $userId)->where('category', 'unsynced')->count(),
+        ]);
     }
 
+    public function content(Note $note)
+    {
+        return response()->json(['content' => $note->content]);
+    }
     public function restoreVersion(Note $note, NoteVersion $version)
     {
-        // Notu versiyon içeriğiyle geri yükle
         $note->update([
             'content' => $version->content,
             'title' => Str::limit(Str::words($version->content, 6), 200),
@@ -139,7 +124,17 @@ class NoteController extends Controller
 
         $notebooks = Notebook::withCount('notes')->get();
 
-        // Aktif notu buraya gönderiyoruz:
+
         return view('dashboard', compact('notes', 'note', 'notebooks', 'starredNotes'));
+    }
+    public function assignNotebook(Request $request, Note $note)
+    {
+        $request->validate([
+            'notebook_id' => 'required|exists:notebooks,id',
+        ]);
+
+        $note->update(['notebook_id' => $request->notebook_id]);
+
+        return response()->json(['success' => true]);
     }
 }
