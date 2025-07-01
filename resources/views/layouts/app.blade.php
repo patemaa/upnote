@@ -22,6 +22,12 @@
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        x-cloak {
+            display: none !important;
+        }
+    </style>
 </head>
 <body class="font-sans antialiased overflow-hidden" >
 <div class="bg-white dark:bg-[#1e2020] text-black dark:text-gray-200">

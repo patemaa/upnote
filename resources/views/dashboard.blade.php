@@ -9,6 +9,8 @@
         $total = $notes->count();
         $todo = $notes->where('category', 'todo')->count();
         $uncategorized = $notes->where('category', 'uncategorized')->count();
+        $starredNotes = $notes->where('is_favorite', true);
+        $lastNote = $notes->sortByDesc('created_at')->first();
     @endphp
 
     <main>
@@ -17,7 +19,8 @@
                 'notes' => $notes,
                 'total' => $total,
                 'todo' => $todo,
-                'uncategorized' => $uncategorized
+                'uncategorized' => $uncategorized,
+                'starredNotes' => $starredNotes
             ])
 
             @include('components.center', ['notes' => $notes])
@@ -28,10 +31,6 @@
                     'notebooks' => $notebooks
                 ])
             @endif
-
-
-
-
         </div>
     </main>
 </x-app-layout>

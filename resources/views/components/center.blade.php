@@ -1,4 +1,4 @@
-<section class="w-64 dark:bg-[#1e2020] border-r dark:border-[#0f0f14] dark:text-gray-200 h-[644px]"
+<section class="w-60 dark:bg-[#1e2020] border-r dark:border-[#0f0f14] dark:text-gray-200 h-[644px]"
          x-data="notesList()" x-init="initSortable()">
 
     <div class="container mx-auto flex justify-between items-center mb-3">
@@ -15,16 +15,53 @@
                         class="flex items-center rounded cursor-pointer transition">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                              stroke="currentColor" class="size-6 px-1 py-1 rounded"
-                             :class="arranging ? 'bg-[#e4f2fe] text-[#037ac6] dark:text-blue-400' : 'dark:text-gray-200 dark:hover:text-gray-400'">
+                             :class="arranging ? 'bg-[#e4f2fe] text-[#037ac6] dark:text-blue-400' : 'text-gray-500 hover:text-gray-600 dark:text-gray-200 dark:hover:text-gray-400'">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"/>
                         </svg>
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                         stroke="currentColor" class="size-5 cursor-pointer dark:hover:text-gray-400">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
-                    </svg>
+                    <div x-data="{ open: false }">
+                        <svg @click="open = !open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="size-5 cursor-pointer text-gray-500 hover:text-gray-600 dark:hover:text-gray-400">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+                        </svg>
+                        <div x-show="open" @click.away="open = false" x-transition
+                             class="absolute mt-1 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50 text-[12px]">
+
+                            <!-- Menü Öğeleri -->
+                            <a href="#"
+                               class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <x-hugeicons-filter-horizontal class="w-3.5 h-3.5"/>
+                                Display
+                            </a>
+                            <a href="#"
+                               class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <x-hugeicons-arrow-up-down class="w-3.5 h-3.5"/>
+                                Sort Notes
+                            </a>
+                            <a href="#"
+                               class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <x-hugeicons-edit-02 class="w-3.5 h-3.5"/>
+                                Edit
+                            </a>
+                            <a href="#"
+                               class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <x-hugeicons-plus-sign class="w-3.5 h-3.5"/>
+                                New Nested Notebook
+                            </a>
+                            <a href="#"
+                               class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <x-hugeicons-delete-02 class="w-3.5 h-3.5"/>
+                                Delete
+                            </a>
+                            <a href="#"
+                               class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <x-hugeicons-share-05 class="w-3.5 h-3.5"/>
+                                Export
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -61,11 +98,9 @@
 
             <div
                 x-data="{ selected: null }"
-                class="space-y-3 pl-4 py-2 dark:bg-[#1e2020] max-h-[calc(100vh-300px)] min-h-[100vh] overflow-y-auto custom-scrollbar"
+                class="space-y-3 pl-4 py-2 dark:bg-[#1e2020] max-h-[calc(518.5px)] min-h-[476px] overflow-y-auto custom-scrollbar"
                 id="notes-list"
                 :class="arranging ? 'cursor-move' : ''">
-
-
                 @foreach($notes->sortBy('order') as $note)
                     @php
                         $title = '';
@@ -107,7 +142,7 @@
                                 <span class="dark:text-white">{{ $title }}</span>
                             </div>
                             <p class="text-[11px] text-gray-500 mt-1 truncate max-w-[180px]">
-                                {{ \Illuminate\Support\Str::limit($body, 100, '...') }}
+                                {{Str::limit($body, 100, '...') }}
                             </p>
                             <span class="text-[10px] text-gray-400 mt-1 block">
             {{ $note->updated_at->setTimezone('Europe/Istanbul')->format('M j, g:iA') }}

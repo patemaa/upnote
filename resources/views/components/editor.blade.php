@@ -5,15 +5,13 @@
                 <svg @click="open = !open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                      stroke-width="1.5"
                      stroke="currentColor"
-                     class="size-4 ml-6 text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 cursor-pointer dark:text-gray-200">
+                     class="size-4 ml-6 text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 cursor-pointer dark:text-gray-300">
                     <path stroke-linecap="round" stroke-linejoin="round"
                           d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                 </svg>
 
                 <div x-show="open" @click.away="open = false" x-transition
                      class="absolute mt-1 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50 text-[12px]">
-
-                    <!-- Menü Öğeleri -->
                     <a href="#"
                        class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <x-hugeicons-image-01 class="w-3.5 h-3.5"/>
@@ -48,10 +46,11 @@
                 </div>
 
                 <div
-                    @click="isStarred = !isStarred"
-                    x-bind:class="isStarred ? 'bg-[#e4f2fe] text-[#1182c9] dark:bg-gray-700 dark:text-blue-400' : 'text-gray-500 hover:text-gray-600 dark:hover:text-white'"
-                    class="flex items-center px-1 py-1 rounded cursor-pointer transition"
-                >
+                    id="favoriteBtn"
+                    class="flex items-center px-1 py-1 rounded cursor-pointer transition
+    {{ $note->is_favorite ? 'bg-[#e4f2fe] text-[#1182c9] dark:bg-gray-700 dark:text-blue-400' : 'text-gray-500 hover:text-gray-600 dark:hover:text-white' }}">
+
+
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                          stroke="currentColor"
                          class="size-4 transition"
@@ -67,7 +66,7 @@
                     @click="showHistory = !showHistory"
                     class="w-4 h-4 dark:hover:text-gray-400 cursor-pointer text-gray-500 hover:text-gray-600 dark:text-gray-300"
                     stroke-width="2"/>
-                <x-history :note="$note" ></x-history>
+                <x-history :note="$note"></x-history>
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                  stroke="currentColor"
@@ -75,12 +74,65 @@
                 <path stroke-linecap="round" stroke-linejoin="round"
                       d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
             </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                 stroke="currentColor"
-                 class="size-5 text-gray-500 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-400 cursor-pointer">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
-            </svg>
+
+            <div x-data="{ open: false }">
+
+                <svg @click="open = !open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="2"
+                     stroke="currentColor"
+                     class="size-5 text-gray-500 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-400 cursor-pointer">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+                </svg>
+
+                <div x-show="open" @click.away="open = false" x-transition
+                     class="absolute mt-1 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50 text-[12px]">
+
+                    <!-- Menü Öğeleri -->
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-share-05 class="w-3.5 h-3.5"/>
+                        Export
+                    </a>
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-search-02 class="w-3.5 h-3.5"/>
+                        Search this note
+                    </a>
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-copy-02 class="w-3.5 h-3.5"/>
+                        Copy To Templates
+                    </a>
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-share-08 class="w-3.5 h-3.5"/>
+                        Share via web link
+                    </a>
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-printer class="w-3.5 h-3.5"/>
+                        Print
+                    </a>
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-coolicon-text class="w-3.5 h-3.5"/>
+                        Text direction
+                    </a>
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-book-bookmark-01 class="w-3.5 h-3.5"/>
+                        Spell check dictionary
+                    </a>
+                    <a href="#"
+                       class="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <x-hugeicons-delete-02 class="w-3.5 h-3.5"/>
+                        Move to trash
+                    </a>
+                </div>
+            </div>
+
+
         </div>
 
         <div class="mr-4 flex items-center space-x-3 ml-3">
@@ -107,8 +159,8 @@
             .ck.ck-editor__editable {
                 background-color: #fff !important;
                 color: #000 !important;
-                min-height: 530px;
-                max-height: 530px;
+                min-height: 543px;
+                max-height: 550px;
                 overflow-y: auto;
                 overflow-x: auto;
                 padding: 1rem !important;
@@ -254,13 +306,21 @@
         <input type="hidden" name="title" id="noteTitle">
         <textarea name="note_content" id="noteContent" hidden></textarea>
 
-        <div id="editor" class="dark:text-white min-h-[600px] px-4 py-2"></div>
+        <div id="editor" class="dark:text-white min-h-[600px] px-4 py-2">
+            @if(request()->routeIs('notes.create'))
+                {{-- Boş sayfa --}}
+            @else
+                {!! $lastNote ? $lastNote->content : '' !!}
+            @endif
+        </div>
 
-        <div x-data="{ open: false }" class="flex justify-center dark:bg-[#27282b] bg-[#f8f8f8] border border-b-gray-200">
+
+        <div x-data="{ open: false }"
+             class="flex justify-center dark:bg-[#27282b] bg-[#f8f8f8] border border-b-gray-200 dark:border-[#0f0f14]">
             <div class="flex px-4 py-1.5 space-x-2 items-center rounded ">
                 {{-- WRAP BUTTON + DROPDOWN --}}
                 <div class="relative">
-                    <button @click="open = !open"
+                    <button @click="open = !open"s
                             type="button"
                             class="flex items-center space-x-2 border bg-[#0078c5] border-[#0078c5] hover:bg-[#0068ac] text-white dark:border-[#4a92fe] dark:bg-[#4a92fe] dark:hover:bg-[#5080d3] dark:text-white text-[12px] px-3 py-1 rounded transition duration-300 mr-2">
 
@@ -321,6 +381,10 @@
         ClassicEditor
             .create(document.querySelector('#editor'))
             .then(editor => {
+                @if(request()->routeIs('notes.create'))
+                    @else
+                    editor.setData(@json($lastNote ? $lastNote->content : ''));
+                    @endif
                 editorInstance = editor;
 
                 // Form gönderilmeden önce veriyi textarea'ya yaz
@@ -366,4 +430,75 @@
             document.getElementById('noteTitle').value = title;
         });
     </script>
+
+    <script>
+        document.getElementById('favoriteBtn').addEventListener('click', function () {
+            fetch(`/notes/{{ $note->id }}/toggle-favorite`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        let el = document.getElementById('favoriteBtn');
+                        // Alpine reactive değilse direkt class değiştiriyoruz
+                        if (data.is_favorite) {
+                            el.classList.remove('text-gray-500', 'hover:text-gray-600');
+                            el.classList.add('bg-[#e4f2fe]', 'text-[#1182c9]', 'dark:bg-gray-700', 'dark:text-blue-400');
+                        } else {
+                            el.classList.add('text-gray-500', 'hover:text-gray-600');
+                            el.classList.remove('bg-[#e4f2fe]', 'text-[#1182c9]', 'dark:bg-gray-700', 'dark:text-blue-400');
+                        }
+                    } else {
+                        alert('Bir hata oluştu.');
+                    }
+                })
+                .catch(() => alert('Sunucu ile bağlantı kurulamadı.'));
+        });
+    </script>
+
+    <script>
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        document.getElementById('favoriteBtn').addEventListener('click', function() {
+            const el = this;
+
+            fetch(`/notes/{{ $note->id }}/toggle-favorite`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({}) // body boş olabilir, backend'de id route parametre ile alınıyor
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error('Sunucu hatası: ' + res.status);
+                    return res.json();
+                })
+                .then(data => {
+                    if(data.success) {
+                        if(data.is_favorite) {
+                            el.classList.remove('text-gray-500', 'hover:text-gray-600');
+                            el.classList.add('bg-[#e4f2fe]', 'text-[#1182c9]', 'dark:bg-gray-700', 'dark:text-blue-400');
+                            el.querySelector('svg').classList.remove('dark:text-gray-300', 'dark:hover:text-gray-400');
+                            el.querySelector('svg').classList.add('dark:text-blue-400');
+                        } else {
+                            el.classList.add('text-gray-500', 'hover:text-gray-600');
+                            el.classList.remove('bg-[#e4f2fe]', 'text-[#1182c9]', 'dark:bg-gray-700', 'dark:text-blue-400');
+                            el.querySelector('svg').classList.add('dark:text-gray-300', 'dark:hover:text-gray-400');
+                            el.querySelector('svg').classList.remove('dark:text-blue-400');
+                        }
+                    } else {
+                        alert('Bir hata oluştu.');
+                    }
+                })
+                .catch(e => alert(e.message));
+        });
+
+    </script>
+
+
 </section>

@@ -20,7 +20,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [NoteController::class, 'index'])->name('dashboard');
     Route::patch('/notes/{note}/update', [NoteController::class, 'update'])->name('notes.update');
     Route::post('/notes/{note}/assign-notebook', [NoteController::class, 'assignNotebook'])->name('notes.assignNotebook');
-    Route::get('/create', [NoteController::class, 'create'])->name('create');
+    Route::get('/create', [NoteController::class, 'create'])->name('notes.create');
     Route::post('/notes/reorder', function(Request $request) {
         $order = $request->input('order', []);
 
@@ -34,6 +34,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notes/{note}/content', [NoteController::class, 'content']);
 
     Route::post('/notes/{note}/restore/{version}', [NoteController::class, 'restoreVersion'])->name('notes.restoreVersion');
+
+    Route::post('/notes/{note}/toggle-favorite', [NoteController::class, 'toggleFavorite'])->name('notes.toggleFavorite');
+
+    Route::get('/notes/{note}', [NoteController::class, 'show'])->name('notes.show');
 });
 
 Route::middleware('auth')->group(function () {

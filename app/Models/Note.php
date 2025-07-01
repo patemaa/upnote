@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Note extends Model
 {
     protected $fillable = ['title', 'content', 'category', 'pinned', 'user_id'];
+    protected $casts = ['is_favorite' => 'boolean',];
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);

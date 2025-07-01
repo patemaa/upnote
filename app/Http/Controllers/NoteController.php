@@ -17,11 +17,18 @@ class NoteController extends Controller
             ->orderByDesc('updated_at')
             ->get();
 
+        $starredNotes = Note::where('user_id', auth()->id())
+            ->where('is_favorite', true)
+            ->orderByDesc('updated_at')
+            ->get();
+        $lastNote = Note::where('user_id', auth()->id())->latest()->first();
+
         $note = $activeNote ?? ($notes->first() ?? new Note());
         $notebooks = Notebook::withCount('notes')->get();
 
-        return view('dashboard', compact('notes', 'note', 'notebooks'));
+        return view('dashboard', compact('notes', 'note', 'notebooks', 'starredNotes', 'lastNote'));
     }
+
     public function create()
     {
         return view('dashboard', [
@@ -30,6 +37,7 @@ class NoteController extends Controller
             'notebooks' => Notebook::where('user_id', auth()->id())->get(),
         ]);
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -46,6 +54,7 @@ class NoteController extends Controller
 
         return redirect('dashboard')->with('success', 'Not başarıyla kaydedildi.');
     }
+
     public function assignNotebook(Request $request, Note $note)
     {
         $request->validate([
@@ -56,6 +65,7 @@ class NoteController extends Controller
 
         return response()->json(['success' => true]);
     }
+
     public function count()
     {
         $userId = auth()->id();
@@ -67,10 +77,12 @@ class NoteController extends Controller
             'unsynced' => Note::where('user_id', $userId)->where('category', 'unsynced')->count(),
         ]);
     }
+
     public function content(Note $note)
     {
         return response()->json(['content' => $note->content]);
     }
+
     public function update(Request $request, Note $note)
     {
         $request->validate([
@@ -90,6 +102,7 @@ class NoteController extends Controller
 
         return redirect()->back()->with('success', 'Not başarıyla güncellendi.');
     }
+
     public function restoreVersion(Note $note, NoteVersion $version)
     {
         // Notu versiyon içeriğiyle geri yükle
@@ -101,4 +114,32 @@ class NoteController extends Controller
         return redirect()->back()->with('success', 'Versiyon geri yüklendi.');
     }
 
+    public function toggleFavorite(Note $note)
+    {
+        $note->is_favorite = !$note->is_favorite;
+        $note->save();
+
+        return response()->json([
+            'success' => true,
+            'is_favorite' => $note->is_favorite,
+        ]);
+    }
+
+    public function show(Note $note)
+    {
+        $notes = Note::where('user_id', auth()->id())
+            ->orderByDesc('pinned')
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $starredNotes = Note::where('user_id', auth()->id())
+            ->where('is_favorite', true)
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $notebooks = Notebook::withCount('notes')->get();
+
+        // Aktif notu buraya gönderiyoruz:
+        return view('dashboard', compact('notes', 'note', 'notebooks', 'starredNotes'));
+    }
 }

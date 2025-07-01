@@ -1,6 +1,6 @@
 <aside
     x-data="{ openNotes: true, openQuick: true, openNotebooks: true, openTags: true, selected: 'uncategorized' }"
-    class="border border-b-gray-200 h-[644px] w-[198px] bg-white dark:bg-[#1e2020] border-r border-gray-200 dark:border-[#0f0f14] p-2 overflow-y-auto text-gray-800 dark:text-gray-200 space-y-2 select-none text-xs">
+    class="border border-b-gray-200 h-[653px] w-[198px] bg-white dark:bg-[#1e2020] border-r border-gray-200 dark:border-[#0f0f14] p-2 overflow-y-auto text-gray-800 dark:text-gray-200 space-y-2 select-none text-xs">
 
     @php
         $total = $notes->count();
@@ -8,7 +8,7 @@
         $uncategorized = $notes->where('category', 'uncategorized')->count();
     @endphp
 
-    {{-- ALL NOTES --}}  ac
+    {{-- ALL NOTES --}}
     <div class="space-y-1">
         <button @click="openNotes = !openNotes"
                 class="flex items-center justify-between w-full hover:text[#1a1a1a] dark:hover:text-white px-2 py-2 rounded  hover:bg-[#f9f9f9] dark:hover:bg-[#2d2e31] cursor-pointer">
@@ -50,6 +50,7 @@
                  class="flex items-center gap-2 hover:bg-[#f9f9f9] dark:hover:text-white px-2 py-2 rounded dark:hover:bg-[#2d2e31] cursor-pointer transition">
                 <x-coolicon-cloud-off class="h-4 w-4 text-pink-500 dark:text-pink-400"/>
                 <span>Unsynced</span>
+                <span>{{ $total }}</span>
             </div>
         </div>
     </div>
@@ -69,8 +70,36 @@
             </div>
         </button>
         <div x-show="openQuick" x-transition class="ml-6 space-y-2">
-            <div class="text-gray-500 text-xs italic px-2">No quick access items yet.</div>
+            @if($starredNotes->isEmpty())
+                <div class="text-gray-500 text-xs italic px-2">No quick access items yet.</div>
+            @else
+                <ul>
+                    @foreach ($starredNotes as $note)
+                        @php
+                            $title = '';
+                            $dom = new \DOMDocument();
+                            @$dom->loadHTML('<html><body>' . $note->content . '</body></html>');
+                            $bodyElement = $dom->getElementsByTagName('body')->item(0);
+                            $lines = [];
+                            if ($bodyElement) {
+                                foreach ($bodyElement->childNodes as $node) {
+                                    if ($node->nodeType === XML_ELEMENT_NODE || $node->nodeType === XML_TEXT_NODE) {
+                                        $text = trim($node->textContent);
+                                        if ($text !== '') {
+                                            $lines[] = $text;
+                                        }
+                                    }
+                                }
+                            }
+                            $title = $lines[0] ?? 'Başlıksız Not';
+                        @endphp
+                        <li class="dark:hover:bg-[#2d2e31]  hover:bg-[#f9f9f9] px-2 py-2 rounded cursor-pointer">{{ $title }}</li>
+
+                    @endforeach
+                </ul>
+            @endif
         </div>
+
     </div>
 
     {{-- NOTEBOOKS --}}
